@@ -1,4 +1,4 @@
-const database = require('../infra/database');
+const database = require('../environment/database');
 
 exports.getPosts = () => {
 	return database.query('select * from blog.post');
