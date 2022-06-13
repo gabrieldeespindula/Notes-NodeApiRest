@@ -14,8 +14,8 @@ exports.deletePost = (id) => {
 	return postsData.deletePost(id);
 }
 
-exports.getPost = (id) => {
-	const post = postsData.getPost(id);
+exports.getPost = async (id) => {
+	const post = await postsData.getPost(id);
 	if (!post) throw new Error('Post not found');
 	return post;
 }

@@ -4,6 +4,14 @@ const app = express();
 app.use(express.json());
 app.use('/', require('./route/postsRoute'));
 app.use((error, req, res, next) => {
+	// const httpStatus = errors.find((item, index) => {
+	// 	index === error.message;
+	// });
+	// if (httpStatus > 0) {
+	// 	return res.status(httpStatus).send(error.message)
+	// }
+	// res.status(500).send(error.message)
+
 	if (error.message === 'Post already exists') {
 		return res.status(409).send(error.message)
 	}

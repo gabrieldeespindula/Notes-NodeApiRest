@@ -13,21 +13,17 @@ const request = (url, method, data) => {
 }
 
 test('Get posts', async () => {
-
-	// insert
+	const postsLength = parseInt((await postsService.getPosts()).length);
 	const arrayPosts = [];
 	for (let i = 1; i <= 3; i++) {
-		let data = { title: generate(i), content: generate(i) };
+		let data = { title: generate(), content: generate() };
 		let insertId = await postsService.savePost(data);
 		arrayPosts.push(insertId);
 	}
-	// search
 	const response = await request('http://localhost:3000/posts', 'get');
 	expect(response.status).toBe(200);
 	const posts = response.data;
-	// compare
-	expect(posts).toHaveLength(3)
-	// delete
+	expect(posts).toHaveLength(postsLength + 3)
 	arrayPosts.forEach(async (item) => {
 		await postsService.deletePost(item.id);
 	});
@@ -64,15 +60,18 @@ test('Update a post', async () => {
 	await postsService.deletePost(post.id);
 })
 
-// test('Post not found', async () => {
-// 	const response = await request(`http://localhost:3000/posts/1`, 'put', post);
-// 	expect(response.status).toBe(404);
-// })
+test('Post not found', async () => {
+	const post = await postsService.savePost({ title: generate(), content: generate() });
+	await postsService.deletePost(post.id);
+	const response = await request(`http://localhost:3000/posts/${post.id}`, 'put', post);
+	expect(response.status).toBe(404);
+})
 
 test('Delete a post', async () => {
+	const postsLength = parseInt((await postsService.getPosts()).length);
 	const post = await postsService.savePost({ title: generate(), content: generate() });
 	const response = await request(`http://localhost:3000/posts/${post.id}`, 'delete');
 	expect(response.status).toBe(204);
 	const deletedPost = await postsService.getPosts();
-	expect(deletedPost).toHaveLength(0);
+	expect(deletedPost).toHaveLength(postsLength);
 })
