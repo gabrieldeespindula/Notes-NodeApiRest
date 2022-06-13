@@ -25,7 +25,7 @@ test('Get posts', async () => {
 	const response = await request('posts');
 	expect(response.status).toBe(200);
 	const posts = response.data;
-	expect(posts).toHaveLength(postsLength + 3)
+	expect(posts).toHaveLength(postsLength + 3);
 	arrayPosts.forEach(async (item) => {
 		await postsService.deletePost(item.id);
 	});
@@ -41,7 +41,21 @@ test('Insert post', async () => {
 	await postsService.deletePost(post.id);
 })
 
-test('Post not inserted', async () => {
+test('Insert post: Missing parameter: title', async () => {
+	const data = { content: generate() };
+	const response = await request('posts', 'post', data);
+	expect(response.status).toBe(400);
+	expect(response.data).toBe('Missing parameter: title');
+})
+
+test('Insert post: Missing parameters: [title, content]', async () => {
+	const data = {};
+	const response = await request('posts', 'post', data);
+	expect(response.status).toBe(400);
+	expect(response.data).toBe('Missing parameters: [ title, content ]');
+})
+
+test('Insert post: Post already exists', async () => {
 	const data = { title: generate(), content: generate() };
 	const response1 = await request('posts', 'post', data);
 	const response2 = await request('posts', 'post', data);
@@ -62,7 +76,16 @@ test('Update a post', async () => {
 	await postsService.deletePost(post.id);
 })
 
-test('Post not found', async () => {
+test('Update a post: Missing parameter: content', async () => {
+	const post = await postsService.savePost({ title: generate(), content: generate() });
+	const data = { title: generate() };
+	const response = await request(`posts/${post.id}`, 'put', data);
+	expect(response.status).toBe(400);
+	expect(response.data).toBe('Missing parameter: content');
+	await postsService.deletePost(post.id);
+})
+
+test('Update a post: Not found', async () => {
 	const post = await postsService.savePost({ title: generate(), content: generate() });
 	await postsService.deletePost(post.id);
 	const response = await request(`posts/${post.id}`, 'put', post);
@@ -76,4 +99,11 @@ test('Delete a post', async () => {
 	expect(response.status).toBe(204);
 	const deletedPost = await postsService.getPosts();
 	expect(deletedPost).toHaveLength(postsLength);
+})
+
+test('Delete a post: Not found', async () => {
+	const post = await postsService.savePost({ title: generate(), content: generate() });
+	await postsService.deletePost(post.id);
+	const response = await request(`posts/${post.id}`, 'put', post);
+	expect(response.status).toBe(404);
 })

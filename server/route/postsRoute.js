@@ -1,11 +1,16 @@
 const express = require('express');
+const { default: next } = require('next');
 const router = express.Router();
 const postsService = require('../service/postsService');
 
 // get all
 router.get('/posts', async (req, res) => {
-	const posts = await postsService.getPosts();
-	res.json(posts);
+	try {
+		const posts = await postsService.getPosts();
+		res.status(200).json(posts);
+	} catch (e) {
+		next(e);
+	}
 });
 
 // get by id
@@ -37,8 +42,12 @@ router.put('/posts/:id', async (req, res, next) => {
 
 // delete
 router.delete('/posts/:id', async (req, res) => {
-	await postsService.deletePost(req.params.id);
-	res.status(204).end();
+	try {
+		await postsService.deletePost(req.params.id);
+		res.status(204).end();
+	} catch (e) {
+		next(e);
+	}
 });
 
 module.exports = router;

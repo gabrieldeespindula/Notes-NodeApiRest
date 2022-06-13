@@ -13,7 +13,7 @@ exports.deletePost = (id) => {
 }
 
 exports.getPost = (id) => {
-	return database.oneOrNone('select * from blog.post where id = $1', [id])
+	return database.oneOrNone('select * from blog.post where id = $1', [id]);
 }
 
 exports.updatePost = (id, post) => {
