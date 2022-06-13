@@ -1,10 +1,32 @@
 const postsData = require('../data/postsData');
 
+const verifyFields = (fields, object) => {
+	let arrayMissing = [];
+	fields.forEach(field => {
+		if (!object[field]) {
+			arrayMissing.push(field);
+		}
+	})
+	if (arrayMissing.length == 0) return;
+	if (arrayMissing.length == 1) throw new Error(`Missing parameter: ${arrayMissing[0]}`);
+	if (arrayMissing.length > 1) {
+		let message = "";
+		arrayMissing.forEach((item) => {
+			message += item + ", ";
+		})
+		message = message.slice(0, -2);
+		throw new Error(`Missing parameters: [ ${message} ]`);
+	}
+}
+
 exports.getPosts = () => {
 	return postsData.getPosts();
 }
 
-exports.savePost = (post) => {
+exports.savePost = async (post) => {
+	verifyFields(['title', 'content'], post);
+	const existingPost = await postsData.getPostByTitle(post.title);
+	if (existingPost) throw new Error('Post already exists');
 	return postsData.savePost(post);
 }
 
@@ -12,10 +34,14 @@ exports.deletePost = (id) => {
 	return postsData.deletePost(id);
 }
 
-exports.getPost = (id) => {
-	return postsData.getPost(id);
+exports.getPost = async (id) => {
+	const post = await postsData.getPost(id);
+	if (!post) throw new Error('Post not found');
+	return post;
 }
 
-exports.updatePost = (id, post) => {
+exports.updatePost = async (id, post) => {
+	verifyFields(['title', 'content'], post);
+	await exports.getPost(id);
 	return postsData.updatePost(id, post);
 }
