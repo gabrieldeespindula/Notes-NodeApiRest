@@ -14,23 +14,31 @@ router.get('/posts/:id', async (req, res) => {
 });
 
 // insert
-router.post('/posts', async (req, res) => {
+router.post('/posts', async (req, res, next) => {
 	const post = req.body;
-	const newPost = await postsService.savePost(post);
-	res.json(newPost);
+	try {
+		const newPost = await postsService.savePost(post);
+		res.status(201).json(newPost);
+	} catch (e) {
+		next(e);
+	}
 });
 
 // update
-router.put('/posts/:id', async (req, res) => {
+router.put('/posts/:id', async (req, res, next) => {
 	const post = req.body;
-	await postsService.updatePost(req.params.id, post);
-	res.end();
+	try {
+		await postsService.updatePost(req.params.id, post);
+		res.status(204).end();
+	} catch (e) {
+		next(e);
+	}
 });
 
 // delete
 router.delete('/posts/:id', async (req, res) => {
 	await postsService.deletePost(req.params.id);
-	res.end();
+	res.status(204).end();
 });
 
 module.exports = router;

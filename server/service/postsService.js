@@ -4,7 +4,9 @@ exports.getPosts = () => {
 	return postsData.getPosts();
 }
 
-exports.savePost = (post) => {
+exports.savePost = async (post) => {
+	const existingPost = await postsData.getPostByTitle(post.title);
+	if (existingPost) throw new Error('Post already exists');
 	return postsData.savePost(post);
 }
 
@@ -13,9 +15,12 @@ exports.deletePost = (id) => {
 }
 
 exports.getPost = (id) => {
-	return postsData.getPost(id);
+	const post = postsData.getPost(id);
+	if (!post) throw new Error('Post not found');
+	return post;
 }
 
-exports.updatePost = (id, post) => {
+exports.updatePost = async (id, post) => {
+	await exports.getPost(id);
 	return postsData.updatePost(id, post);
 }
