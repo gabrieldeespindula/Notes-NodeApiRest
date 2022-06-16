@@ -1,13 +1,7 @@
 const axios = require('axios');
 const postsService = require('../service/postsService');
-const crypto = require('crypto');
-const { response } = require('express');
-const { text } = require('body-parser');
 const environment = require('../environment/environment');
-
-const generate = (num = 20) => {
-	return Math.random().toString(36).substring(0, num);
-}
+const { faker } = require('@faker-js/faker');
 
 const request = (endpoint, method = 'get', data) => {
 	const url = environment.url + endpoint;
@@ -18,7 +12,7 @@ test('Get posts', async () => {
 	const postsLength = parseInt((await postsService.getPosts()).length);
 	const arrayPosts = [];
 	for (let i = 1; i <= 3; i++) {
-		let data = { title: generate(), content: generate() };
+		let data = { title: faker.lorem.sentence(), content: faker.lorem.text() };
 		let insertId = await postsService.savePost(data);
 		arrayPosts.push(insertId);
 	}
@@ -32,7 +26,7 @@ test('Get posts', async () => {
 })
 
 test('Insert post', async () => {
-	const data = { title: generate(), content: generate() };
+	const data = { title: faker.lorem.sentence(), content: faker.lorem.text() };
 	const response = await request('posts', 'post', data);
 	expect(response.status).toBe(201);
 	const post = response.data;
@@ -42,7 +36,7 @@ test('Insert post', async () => {
 })
 
 test('Insert post: Missing parameter: title', async () => {
-	const data = { content: generate() };
+	const data = { content: faker.lorem.text() };
 	const response = await request('posts', 'post', data);
 	expect(response.status).toBe(400);
 	expect(response.data).toBe('Missing parameter: title');
@@ -56,7 +50,7 @@ test('Insert post: Missing parameters: [title, content]', async () => {
 })
 
 test('Insert post: Post already exists', async () => {
-	const data = { title: generate(), content: generate() };
+	const data = { title: faker.lorem.sentence(), content: faker.lorem.text() };
 	const response1 = await request('posts', 'post', data);
 	const response2 = await request('posts', 'post', data);
 	expect(response2.status).toBe(409);
@@ -65,9 +59,9 @@ test('Insert post: Post already exists', async () => {
 })
 
 test('Update a post', async () => {
-	const post = await postsService.savePost({ title: generate(), content: generate() });
-	post.title = generate();
-	post.content = generate();
+	const post = await postsService.savePost({ title: faker.lorem.sentence(), content: faker.lorem.text() });
+	post.title = faker.lorem.sentence();
+	post.content = faker.lorem.text();
 	const response = await request(`posts/${post.id}`, 'put', post);
 	expect(response.status).toBe(204);
 	const updatedPost = await postsService.getPost(post.id);
@@ -77,8 +71,8 @@ test('Update a post', async () => {
 })
 
 test('Update a post: Missing parameter: content', async () => {
-	const post = await postsService.savePost({ title: generate(), content: generate() });
-	const data = { title: generate() };
+	const post = await postsService.savePost({ title: faker.lorem.sentence(), content: faker.lorem.text() });
+	const data = { title: faker.lorem.sentence() };
 	const response = await request(`posts/${post.id}`, 'put', data);
 	expect(response.status).toBe(400);
 	expect(response.data).toBe('Missing parameter: content');
@@ -86,7 +80,7 @@ test('Update a post: Missing parameter: content', async () => {
 })
 
 test('Update a post: Not found', async () => {
-	const post = await postsService.savePost({ title: generate(), content: generate() });
+	const post = await postsService.savePost({ title: faker.lorem.sentence(), content: faker.lorem.text() });
 	await postsService.deletePost(post.id);
 	const response = await request(`posts/${post.id}`, 'put', post);
 	expect(response.status).toBe(404);
@@ -94,7 +88,7 @@ test('Update a post: Not found', async () => {
 
 test('Delete a post', async () => {
 	const postsLength = parseInt((await postsService.getPosts()).length);
-	const post = await postsService.savePost({ title: generate(), content: generate() });
+	const post = await postsService.savePost({ title: faker.lorem.sentence(), content: faker.lorem.text() });
 	const response = await request(`posts/${post.id}`, 'delete');
 	expect(response.status).toBe(204);
 	const deletedPost = await postsService.getPosts();
@@ -102,7 +96,7 @@ test('Delete a post', async () => {
 })
 
 test('Delete a post: Not found', async () => {
-	const post = await postsService.savePost({ title: generate(), content: generate() });
+	const post = await postsService.savePost({ title: faker.lorem.sentence(), content: faker.lorem.text() });
 	await postsService.deletePost(post.id);
 	const response = await request(`posts/${post.id}`, 'put', post);
 	expect(response.status).toBe(404);
