@@ -1,21 +1,24 @@
+const express = require('express');
 const PostsService = require('../service/PostsService');
 const postsService = new PostsService();
 
+/** Post routes */
 module.exports = class PostsRoute {
 
 	router;
-	constructor(express) {
+	constructor() {
 		this.router = express.Router();
 		this.setRoutes();
 	}
 
+	/** Use this function to set the routes */
 	setRoutes() {
-		this.router.get('/posts', async (req, res) => {
+		this.router.get('/posts', async (req, res, errorHandler) => {
 			try {
 				const posts = await postsService.getPosts();
 				res.status(200).json(posts);
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 
@@ -25,38 +28,39 @@ module.exports = class PostsRoute {
 		});
 
 		// insert
-		this.router.post('/posts', async (req, res, next) => {
+		this.router.post('/posts', async (req, res, errorHandler) => {
 			const post = req.body;
 			try {
 				const newPost = await postsService.savePost(post);
 				res.status(201).json(newPost);
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 
 		// update
-		this.router.put('/posts/:id', async (req, res, next) => {
+		this.router.put('/posts/:id', async (req, res, errorHandler) => {
 			const post = req.body;
 			try {
 				await postsService.updatePost(req.params.id, post);
 				res.status(204).end();
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 
 		// delete
-		this.router.delete('/posts/:id', async (req, res) => {
+		this.router.delete('/posts/:id', async (req, res, errorHandler) => {
 			try {
 				await postsService.deletePost(req.params.id);
 				res.status(204).end();
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 	}
 
+	/** return routes */
 	getRoutes() {
 		return this.router;
 	}

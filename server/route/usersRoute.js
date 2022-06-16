@@ -1,63 +1,59 @@
+const express = require('express');
 const UsersService = require('../service/UsersService');
 const usersService = new UsersService();
 
+/** User routes */
 module.exports = class PostsRoute {
 
 	router;
-	constructor(express) {
+	constructor() {
 		this.router = express.Router();
 		this.setRoutes();
 	}
 
+	/** Use this function to set the routes */
 	setRoutes() {
-		// get all
-		this.router.get('/users', async (req, res) => {
+
+		this.router.get('/users', async (req, res, errorHandler) => {
 			try {
 				const users = await usersService.getUsers();
 				res.status(200).json(users);
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 
-		// get by id
-		this.router.get('/users/:id', async (req, res) => {
-
-		});
-
-		// insert
-		this.router.post('/users', async (req, res, next) => {
+		this.router.post('/users', async (req, res, errorHandler) => {
 			const post = req.body;
 			try {
 				const newUser = await usersService.saveUser(post);
 				res.status(201).json(newUser);
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 
-		// update
-		this.router.put('/users/:id', async (req, res, next) => {
+		this.router.put('/users/:id', async (req, res, errorHandler) => {
 			const post = req.body;
 			try {
 				await usersService.updateUser(req.params.id, post);
 				res.status(204).end();
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 
-		// delete
-		this.router.delete('/users/:id', async (req, res) => {
+		this.router.delete('/users/:id', async (req, res, errorHandler) => {
 			try {
 				await usersService.deleteUser(req.params.id);
 				res.status(204).end();
 			} catch (e) {
-				next(e);
+				errorHandler(e);
 			}
 		});
 	}
 
+	/** return routes */
 	getRoutes() {
 		return this.router;
 	}

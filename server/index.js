@@ -2,6 +2,7 @@ const express = require('express');
 const PostsRoute = require('./route/PostsRoute');
 const UsersRoute = require('./route/UsersRoute');
 
+/** Server launcher and general configuration */
 class App {
 
 	app;
@@ -16,15 +17,17 @@ class App {
 		this.app.listen(3000);
 	}
 
+	/** Fetch API routes */
 	getRoutes() {
-		const postsRoute = new PostsRoute(express);
-		const usersRoute = new UsersRoute(express);
+		const postsRoute = new PostsRoute();
+		const usersRoute = new UsersRoute();
 
 		this.app.use('/', postsRoute.getRoutes());
 		this.app.use('/', usersRoute.getRoutes());
 	}
 
-	errorHandler(error, req, res, next) {
+	/** Error handling and returns */
+	errorHandler(error, req, res, errorHandler) {
 		if (error.message.indexOf('already exists') > -1) {
 			return res.status(409).send(error.message);
 		}
