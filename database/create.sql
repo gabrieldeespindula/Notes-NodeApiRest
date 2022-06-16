@@ -6,3 +6,11 @@ create table blog.post (
 	content text not null,
 	date timestamp default now()
 );
+
+create table blog.user (
+	id serial primary key,
+	name text not null,
+	email text not null UNIQUE,
+	password text not null,
+	date timestamp default now()
+);
