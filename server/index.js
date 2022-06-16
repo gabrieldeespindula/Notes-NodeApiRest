@@ -2,9 +2,13 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
+
 app.use('/', require('./route/postsRoute'));
+
+app.use('/', require('./route/usersRoute'));
+
 app.use((error, req, res, next) => {
-	if (error.message === 'Post already exists') {
+	if (error.message.indexOf('already exists') > -1) {
 		return res.status(409).send(error.message);
 	}
 	if (error.message.indexOf('not found') > -1) {
