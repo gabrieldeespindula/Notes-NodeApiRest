@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-module.exports = class {
+module.exports = class Util {
 
 	constructor() {
 	}

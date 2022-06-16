@@ -1,30 +1,38 @@
-const postsData = require('../data/postsData');
-const PostsData = new postsData();
+const PostsData = require('../data/postsData');
+const postsData = new PostsData();
 const Util = require('../libs/Util');
 
-exports.getPosts = () => {
-	return PostsData.getAll();
-}
+const Service = require('./Service');
+module.exports = class PostsService extends Service {
 
-exports.savePost = async (post) => {
-	Util.verifyFields(['title', 'content'], post);
-	const existingPost = await PostsData.getPostByTitle(post.title);
-	if (existingPost) throw new Error('Post already exists');
-	return PostsData.savePost(post);
-}
+	constructor() {
+		super();
+	}
 
-exports.deletePost = (id) => {
-	return PostsData.delete(id);
-}
+	getPosts() {
+		return postsData.getAll();
+	}
 
-exports.getPost = async (id) => {
-	const post = await PostsData.getById(id);
-	if (!post) throw new Error('Post not found');
-	return post;
-}
+	async savePost(post) {
+		Util.verifyFields(['title', 'content'], post);
+		const existingPost = await postsData.getPostByTitle(post.title);
+		if (existingPost) throw new Error('Post already exists');
+		return postsData.savePost(post);
+	}
 
-exports.updatePost = async (id, post) => {
-	Util.verifyFields(['title', 'content'], post);
-	await exports.getPost(id);
-	return PostsData.updatePost(id, post);
+	deletePost(id) {
+		return postsData.delete(id);
+	}
+
+	async getPost(id) {
+		const post = await postsData.getById(id);
+		if (!post) throw new Error('Post not found');
+		return post;
+	}
+
+	async updatePost(id, post) {
+		Util.verifyFields(['title', 'content'], post);
+		await this.getPost(id);
+		return postsData.updatePost(id, post);
+	}
 }

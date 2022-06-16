@@ -1,7 +1,7 @@
 const database = require('../environment/database');
 const Data = require('./Data');
 
-module.exports = class extends Data {
+module.exports = class PostsData extends Data {
 
 	constructor() {
 		super('post');

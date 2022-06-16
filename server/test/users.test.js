@@ -1,7 +1,9 @@
 const axios = require('axios');
-const usersService = require('../service/usersService');
+const UsersService = require('../service/usersService');
 const environment = require('../environment/environment');
 const { faker } = require('@faker-js/faker');
+
+const usersService = new UsersService();
 
 const request = (endpoint, method = 'get', data) => {
 	const url = environment.url + endpoint;

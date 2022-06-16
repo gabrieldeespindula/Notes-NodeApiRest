@@ -1,6 +1,6 @@
 const database = require('../environment/database');
 
-module.exports = class {
+module.exports = class Data {
 
 	table;
 	constructor(table) {

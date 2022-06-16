@@ -1,32 +1,41 @@
-const usersData = require('../data/usersData');
-const UsersData = new usersData();
+const UsersData = require('../data/usersData');
 const Util = require('../libs/Util');
+const usersData = new UsersData();
 
-exports.getUsers = () => {
-	return UsersData.getAll();
-}
+const Service = require('./Service');
+module.exports = class UsersService extends Service {
 
-exports.saveUser = async (user) => {
-	Util.verifyFields(['name', 'email', 'password'], user);
-	const existingUser = await UsersData.getUserByEmail(user.email);
-	if (existingUser) throw new Error('User already exists');
-	user.password = await Util.hashPassword(user.password);
-	return UsersData.saveUser(user);
-}
+	constructor() {
+		super();
+	}
 
-exports.deleteUser = (id) => {
-	return UsersData.delete(id);
-}
+	getUsers() {
+		return usersData.getAll();
+	}
 
-exports.getUser = async (id) => {
-	const user = await UsersData.getById(id);
-	if (!user) throw new Error('User not found');
-	return user;
-}
+	async saveUser(user) {
+		Util.verifyFields(['name', 'email', 'password'], user);
+		const existingUser = await usersData.getUserByEmail(user.email);
+		if (existingUser) throw new Error('User already exists');
+		user.password = await Util.hashPassword(user.password);
+		return usersData.saveUser(user);
+	}
 
-exports.updateUser = async (id, user) => {
-	Util.verifyFields(['name', 'password'], user);
-	await exports.getUser(id);
-	user.password = await Util.hashPassword(user.password);
-	return UsersData.updateUser(id, user);
+	deleteUser(id) {
+		return usersData.delete(id);
+	}
+
+	async getUser(id) {
+		const user = await usersData.getById(id);
+		if (!user) throw new Error('User not found');
+		return user;
+	}
+
+	async updateUser(id, user) {
+		Util.verifyFields(['name', 'password'], user);
+		await this.getUser(id);
+		user.password = await Util.hashPassword(user.password);
+		return usersData.updateUser(id, user);
+	}
+
 }
