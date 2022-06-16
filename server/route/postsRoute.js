@@ -1,7 +1,7 @@
 const express = require('express');
 const { default: next } = require('next');
 const router = express.Router();
-const PostsService = require('../service/postsService');
+const PostsService = require('../service/PostsService');
 
 const postsService = new PostsService();
 

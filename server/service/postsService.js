@@ -1,4 +1,4 @@
-const PostsData = require('../data/postsData');
+const PostsData = require('../data/PostsData');
 const postsData = new PostsData();
 const Util = require('../libs/Util');
 

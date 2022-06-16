@@ -1,4 +1,4 @@
-const UsersData = require('../data/usersData');
+const UsersData = require('../data/UsersData');
 const Util = require('../libs/Util');
 const usersData = new UsersData();
 

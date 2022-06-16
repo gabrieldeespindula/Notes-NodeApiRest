@@ -1,7 +1,7 @@
 const express = require('express');
 const { default: next } = require('next');
 const router = express.Router();
-const UsersService = require('../service/usersService');
+const UsersService = require('../service/UsersService');
 const usersService = new UsersService();
 
 // get all

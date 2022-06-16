@@ -3,9 +3,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/', require('./route/postsRoute'));
+app.use('/', require('./route/PostsRoute'));
 
-app.use('/', require('./route/usersRoute'));
+app.use('/', require('./route/UsersRoute'));
 
 app.use((error, req, res, next) => {
 	if (error.message.indexOf('already exists') > -1) {

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const PostsService = require('../service/postsService');
+const PostsService = require('../service/PostsService');
 const environment = require('../environment/environment');
 const { faker } = require('@faker-js/faker');
 
