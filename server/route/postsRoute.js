@@ -1,7 +1,9 @@
 const express = require('express');
 const { default: next } = require('next');
 const router = express.Router();
-const postsService = require('../service/postsService');
+const PostsService = require('../service/PostsService');
+
+const postsService = new PostsService();
 
 // get all
 router.get('/posts', async (req, res) => {
