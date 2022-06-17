@@ -1,23 +1,21 @@
 const environment = require('../environment/environment');
 const pgp = require('pg-promise')();
 
+const database = pgp({
+	user: environment.db.user,
+	password: environment.db.password,
+	host: environment.db.hostuser,
+	port: environment.db.portuser,
+	database: environment.db.databaseuser
+});
+
 module.exports = class Data {
 
 	database;
 	table;
 	constructor(table) {
 		this.table = environment.db.schema + '.' + table;
-		this.database = this.connect();
-	}
-
-	connect() {
-		return pgp({
-			user: environment.db.user,
-			password: environment.db.password,
-			host: environment.db.hostuser,
-			port: environment.db.portuser,
-			database: environment.db.databaseuser
-		});
+		this.database = database;
 	}
 
 	delete(id) {
