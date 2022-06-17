@@ -1,4 +1,5 @@
-const database = require('../environment/database');
+const environment = require('../environment/environment');
+const pgp = require('pg-promise')();
 
 module.exports = class Data {
 
@@ -6,19 +7,29 @@ module.exports = class Data {
 	table;
 	constructor(table) {
 		this.table = 'blog.' + table;
-		this.database = database;
+		this.database = this.connect();
+	}
+
+	connect() {
+		return pgp({
+			user: environment.db.user,
+			password: environment.db.password,
+			host: environment.db.hostuser,
+			port: environment.db.portuser,
+			database: environment.db.databaseuser
+		});
 	}
 
 	delete(id) {
-		return database.none(`delete from ${this.table} where id =  $1 `, [id]);
+		return this.database.none(`delete from ${this.table} where id =  $1 `, [id]);
 	}
 
 	getById(id) {
-		return database.oneOrNone(`select * from ${this.table} where id = $1`, [id]);
+		return this.database.oneOrNone(`select * from ${this.table} where id = $1`, [id]);
 	}
 
 	getAll() {
-		return database.query(`select * from ${this.table}`);
+		return this.database.query(`select * from ${this.table}`);
 	};
 
 }
