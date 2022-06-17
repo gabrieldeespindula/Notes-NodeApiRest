@@ -1,6 +1,5 @@
 const express = require('express');
 const UsersService = require('../service/UsersService');
-const usersService = new UsersService();
 
 /** User routes */
 module.exports = class PostsRoute {
@@ -13,7 +12,7 @@ module.exports = class PostsRoute {
 
 	/** Use this function to set the routes */
 	setRoutes() {
-
+		const usersService = new UsersService();
 		this.router.get('/users', async (req, res, errorHandler) => {
 			try {
 				const users = await usersService.getUsers();

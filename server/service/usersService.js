@@ -1,32 +1,33 @@
+const Service = require('./Service');
 const UsersData = require('../data/UsersData');
 const Util = require('../libs/Util');
-const usersData = new UsersData();
 
-const Service = require('./Service');
 module.exports = class UsersService extends Service {
+	usersData;
 
 	constructor() {
 		super();
+		this.usersData = new UsersData();
 	}
 
 	getUsers() {
-		return usersData.getAll();
+		return this.usersData.getAll();
 	}
 
 	async saveUser(user) {
 		Util.verifyFields(['name', 'email', 'password'], user);
-		const existingUser = await usersData.getUserByEmail(user.email);
+		const existingUser = await this.usersData.getUserByEmail(user.email);
 		if (existingUser) throw new Error('User already exists');
 		user.password = await Util.hashPassword(user.password);
-		return usersData.saveUser(user);
+		return this.usersData.saveUser(user);
 	}
 
 	deleteUser(id) {
-		return usersData.delete(id);
+		return this.usersData.delete(id);
 	}
 
 	async getUser(id) {
-		const user = await usersData.getById(id);
+		const user = await this.usersData.getById(id);
 		if (!user) throw new Error('User not found');
 		return user;
 	}
@@ -35,7 +36,7 @@ module.exports = class UsersService extends Service {
 		Util.verifyFields(['name', 'password'], user);
 		await this.getUser(id);
 		user.password = await Util.hashPassword(user.password);
-		return usersData.updateUser(id, user);
+		return this.usersData.updateUser(id, user);
 	}
 
 }

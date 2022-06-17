@@ -1,6 +1,5 @@
 const express = require('express');
 const PostsService = require('../service/PostsService');
-const postsService = new PostsService();
 
 /** Post routes */
 module.exports = class PostsRoute {
@@ -13,6 +12,7 @@ module.exports = class PostsRoute {
 
 	/** Use this function to set the routes */
 	setRoutes() {
+		const postsService = new PostsService();
 		this.router.get('/posts', async (req, res, errorHandler) => {
 			try {
 				const posts = await postsService.getPosts();
