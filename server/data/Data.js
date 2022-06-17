@@ -2,9 +2,11 @@ const database = require('../environment/database');
 
 module.exports = class Data {
 
+	database;
 	table;
 	constructor(table) {
 		this.table = 'blog.' + table;
+		this.database = database;
 	}
 
 	delete(id) {
