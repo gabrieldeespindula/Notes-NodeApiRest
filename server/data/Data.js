@@ -6,7 +6,7 @@ module.exports = class Data {
 	database;
 	table;
 	constructor(table) {
-		this.table = 'blog.' + table;
+		this.table = environment.db.schema + '.' + table;
 		this.database = this.connect();
 	}
 
