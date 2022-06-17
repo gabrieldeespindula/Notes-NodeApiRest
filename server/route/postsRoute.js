@@ -1,55 +1,68 @@
 const express = require('express');
-const { default: next } = require('next');
-const router = express.Router();
 const PostsService = require('../service/PostsService');
 
-const postsService = new PostsService();
+/** Post routes */
+module.exports = class PostsRoute {
 
-// get all
-router.get('/posts', async (req, res) => {
-	try {
-		const posts = await postsService.getPosts();
-		res.status(200).json(posts);
-	} catch (e) {
-		next(e);
+	router;
+	constructor() {
+		this.router = express.Router();
+		this.setRoutes();
 	}
-});
 
-// get by id
-router.get('/posts/:id', async (req, res) => {
+	/** Use this function to set the routes */
+	setRoutes() {
+		const postsService = new PostsService();
+		this.router.get('/posts', async (req, res, errorHandler) => {
+			try {
+				const posts = await postsService.getPosts();
+				res.status(200).json(posts);
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
 
-});
+		// get by id
+		this.router.get('/posts/:id', async (req, res) => {
 
-// insert
-router.post('/posts', async (req, res, next) => {
-	const post = req.body;
-	try {
-		const newPost = await postsService.savePost(post);
-		res.status(201).json(newPost);
-	} catch (e) {
-		next(e);
+		});
+
+		// insert
+		this.router.post('/posts', async (req, res, errorHandler) => {
+			const post = req.body;
+			try {
+				const newPost = await postsService.savePost(post);
+				res.status(201).json(newPost);
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
+
+		// update
+		this.router.put('/posts/:id', async (req, res, errorHandler) => {
+			const post = req.body;
+			try {
+				await postsService.updatePost(req.params.id, post);
+				res.status(204).end();
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
+
+		// delete
+		this.router.delete('/posts/:id', async (req, res, errorHandler) => {
+			try {
+				await postsService.deletePost(req.params.id);
+				res.status(204).end();
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
 	}
-});
 
-// update
-router.put('/posts/:id', async (req, res, next) => {
-	const post = req.body;
-	try {
-		await postsService.updatePost(req.params.id, post);
-		res.status(204).end();
-	} catch (e) {
-		next(e);
+	/** return routes */
+	getRoutes() {
+		return this.router;
 	}
-});
 
-// delete
-router.delete('/posts/:id', async (req, res) => {
-	try {
-		await postsService.deletePost(req.params.id);
-		res.status(204).end();
-	} catch (e) {
-		next(e);
-	}
-});
-
-module.exports = router;
+}

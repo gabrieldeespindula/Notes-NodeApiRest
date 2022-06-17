@@ -1,31 +1,32 @@
+const Service = require('./Service');
 const PostsData = require('../data/PostsData');
-const postsData = new PostsData();
 const Util = require('../libs/Util');
 
-const Service = require('./Service');
 module.exports = class PostsService extends Service {
+	postsData;
 
 	constructor() {
 		super();
+		this.postData = new PostsData();
 	}
 
 	getPosts() {
-		return postsData.getAll();
+		return this.postData.getAll();
 	}
 
 	async savePost(post) {
 		Util.verifyFields(['title', 'content'], post);
-		const existingPost = await postsData.getPostByTitle(post.title);
+		const existingPost = await this.postData.getPostByTitle(post.title);
 		if (existingPost) throw new Error('Post already exists');
-		return postsData.savePost(post);
+		return this.postData.savePost(post);
 	}
 
 	deletePost(id) {
-		return postsData.delete(id);
+		return this.postData.delete(id);
 	}
 
 	async getPost(id) {
-		const post = await postsData.getById(id);
+		const post = await this.postData.getById(id);
 		if (!post) throw new Error('Post not found');
 		return post;
 	}
@@ -33,6 +34,6 @@ module.exports = class PostsService extends Service {
 	async updatePost(id, post) {
 		Util.verifyFields(['title', 'content'], post);
 		await this.getPost(id);
-		return postsData.updatePost(id, post);
+		return this.postData.updatePost(id, post);
 	}
 }
