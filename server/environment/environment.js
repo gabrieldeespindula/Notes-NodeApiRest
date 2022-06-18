@@ -7,7 +7,8 @@ const environment = {
 		port: 5432,
 		schema: 'blog',
 		database: 'postgres'
-	}
+	},
+	JWT_KEY: "jpt6kjd@yrt5qvc!PYD"
 };
 
 module.exports = environment;

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken')
+const environment = require('../environment/environment')
 module.exports = class Util {
 
 	constructor() {
@@ -33,6 +34,21 @@ module.exports = class Util {
 		})
 
 		return hashedPassword;
+	}
+
+	static async comparePassword(password1, password2) {
+		const hashedPassword = await new Promise((resolve, reject) => {
+			bcrypt.compare(password1, password2, function (err, hash) {
+				if (err) reject(err)
+				resolve(hash)
+			});
+		})
+
+		return hashedPassword;
+	}
+
+	static jwtSign(data) {
+		return jwt.sign(data, environment.JWT_KEY, { expiresIn: "7d" })
 	}
 
 }

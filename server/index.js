@@ -28,6 +28,9 @@ class App {
 
 	/** Error handling and returns */
 	errorHandler(error, req, res, errorHandler) {
+		if (error.message.indexOf('Authentication failed') > -1) {
+			return res.status(401).send(error.message);
+		}
 		if (error.message.indexOf('already exists') > -1) {
 			return res.status(409).send(error.message);
 		}

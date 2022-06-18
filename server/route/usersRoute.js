@@ -50,6 +50,16 @@ module.exports = class PostsRoute {
 				errorHandler(e);
 			}
 		});
+
+		this.router.post('/users/login', async (req, res, errorHandler) => {
+			const login = req.body;
+			try {
+				const verifyUser = await usersService.login(login);
+				res.status(200).json(verifyUser);
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
 	}
 
 	/** return routes */
