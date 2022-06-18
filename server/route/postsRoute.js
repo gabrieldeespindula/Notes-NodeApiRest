@@ -1,12 +1,11 @@
-const express = require('express');
+const Route = require('./Route');
 const PostsService = require('../service/PostsService');
 
 /** Post routes */
-module.exports = class PostsRoute {
+module.exports = class PostsRoute extends Route {
 
-	router;
 	constructor() {
-		this.router = express.Router();
+		super();
 		this.setRoutes();
 	}
 

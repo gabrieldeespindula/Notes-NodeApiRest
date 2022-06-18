@@ -51,4 +51,8 @@ module.exports = class Util {
 		return jwt.sign(data, environment.JWT_KEY, { expiresIn: "7d" })
 	}
 
+	static jwtVerify(data) {
+		return jwt.verify(data, environment.JWT_KEY)
+	}
+
 }
