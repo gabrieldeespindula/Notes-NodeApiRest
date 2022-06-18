@@ -5,7 +5,7 @@ const environment = {
 		password: '1234',
 		host: 'localhost',
 		port: 5432,
-		schema: 'blog',
+		schema: 'notes',
 		database: 'postgres'
 	},
 	JWT_KEY: "jpt6kjd@yrt5qvc!PYD"

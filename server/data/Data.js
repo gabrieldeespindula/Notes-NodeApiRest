@@ -12,22 +12,24 @@ const database = pgp({
 module.exports = class Data {
 
 	database;
+	schema;
 	table;
 	constructor(table) {
-		this.table = environment.db.schema + '.' + table;
+		this.schema = environment.db.schema;
 		this.database = database;
+		this.table = table;
 	}
 
 	delete(id) {
-		return this.database.none(`delete from ${this.table} where id =  $1 `, [id]);
+		return this.database.none(`delete from ${this.schema}.${this.table} where id =  $1 `, [id]);
 	}
 
 	getById(id) {
-		return this.database.oneOrNone(`select * from ${this.table} where id = $1`, [id]);
+		return this.database.oneOrNone(`select * from ${this.schema}.${this.table} where id = $1`, [id]);
 	}
 
 	getAll() {
-		return this.database.query(`select * from ${this.table}`);
+		return this.database.query(`select * from ${this.schema}.${this.table}`);
 	};
 
 }
