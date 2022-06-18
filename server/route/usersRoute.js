@@ -2,7 +2,7 @@ const Route = require('./Route');
 const UsersService = require('../service/UsersService');
 
 /** User routes */
-module.exports = class PostsRoute extends Route {
+module.exports = class NotesRoute extends Route {
 
 	constructor() {
 		super();
