@@ -1,5 +1,5 @@
 const express = require('express');
-const PostsRoute = require('./route/PostsRoute');
+const NotesRoute = require('./route/NotesRoute');
 const UsersRoute = require('./route/UsersRoute');
 
 /** Server launcher and general configuration */
@@ -19,15 +19,18 @@ class App {
 
 	/** Fetch API routes */
 	getRoutes() {
-		const postsRoute = new PostsRoute();
+		const notesRoute = new NotesRoute();
 		const usersRoute = new UsersRoute();
 
-		this.app.use('/', postsRoute.getRoutes());
+		this.app.use('/', notesRoute.getRoutes());
 		this.app.use('/', usersRoute.getRoutes());
 	}
 
 	/** Error handling and returns */
 	errorHandler(error, req, res, errorHandler) {
+		if (error.message.indexOf('Authentication failed') > -1) {
+			return res.status(401).send(error.message);
+		}
 		if (error.message.indexOf('already exists') > -1) {
 			return res.status(409).send(error.message);
 		}

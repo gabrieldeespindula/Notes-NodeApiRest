@@ -103,3 +103,41 @@ test('Delete a user: Not found', async () => {
 	const response = await request(`users/${user.id}`, 'put', user);
 	expect(response.status).toBe(404);
 })
+
+test('Login', async () => {
+	const password = faker.internet.password();
+	const data = { name: faker.name.findName(), email: faker.internet.email(), password: password };
+	const user = await usersService.saveUser(data);
+	data.password = password;
+	const response = await request('users/login', 'post', data);
+	expect(response.status).toBe(200);
+	await usersService.deleteUser(user.id);
+})
+
+test('Login: Authentication failed(email)', async () => {
+	const password = faker.internet.password();
+	const data = { name: faker.name.findName(), email: faker.internet.email(), password: password };
+	const user = await usersService.saveUser(data);
+	data.password = password;
+	data.email = faker.internet.email();
+	const response = await request('users/login', 'post', data);
+	expect(response.status).toBe(401);
+	await usersService.deleteUser(user.id);
+})
+
+test('Login: Authentication failed(password)', async () => {
+	const data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
+	const user = await usersService.saveUser(data);
+	data.password = faker.internet.password();
+	const response = await request('users/login', 'post', data);
+	expect(response.status).toBe(401);
+	await usersService.deleteUser(user.id);
+})
+
+test('Login: Missing parameter', async () => {
+	const data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
+	const user = await usersService.saveUser(data);
+	const response = await request('users/login', 'post', {});
+	expect(response.status).toBe(400);
+	await usersService.deleteUser(user.id);
+})

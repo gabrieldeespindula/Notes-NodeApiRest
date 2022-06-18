@@ -39,4 +39,17 @@ module.exports = class UsersService extends Service {
 		return this.usersData.updateUser(id, user);
 	}
 
+	async login(login) {
+		Util.verifyFields(['email', 'password'], login);
+		const user = await this.usersData.getUserByEmail(login.email);
+		if (!user) throw new Error('Authentication failed');
+		const verifyPassword = await Util.comparePassword(login.password, user.password);
+		if (!verifyPassword) throw new Error('Authentication failed');
+		const dataJwt = {
+			id: user.id,
+			email: user.email
+		}
+		return Util.jwtSign(dataJwt);
+	}
+
 }

@@ -1,12 +1,11 @@
-const express = require('express');
+const Route = require('./Route');
 const UsersService = require('../service/UsersService');
 
 /** User routes */
-module.exports = class PostsRoute {
+module.exports = class NotesRoute extends Route {
 
-	router;
 	constructor() {
-		this.router = express.Router();
+		super();
 		this.setRoutes();
 	}
 
@@ -46,6 +45,16 @@ module.exports = class PostsRoute {
 			try {
 				await usersService.deleteUser(req.params.id);
 				res.status(204).end();
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
+
+		this.router.post('/users/login', async (req, res, errorHandler) => {
+			const login = req.body;
+			try {
+				const verifyUser = await usersService.login(login);
+				res.status(200).json(verifyUser);
 			} catch (e) {
 				errorHandler(e);
 			}
