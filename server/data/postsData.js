@@ -6,15 +6,19 @@ module.exports = class PostsData extends Data {
 		super('note');
 	}
 
+	getItemsByUserId(user_id) {
+		return this.database.query(`select * from ${this.schema}.${this.table} where user_id = $1`, [user_id]);
+	}
+
 	savePost(post) {
-		return this.database.one(`insert into ${this.schema}.${this.table} (title, content) values ($1, $2) returning *`, [post.title, post.content]);
+		return this.database.one(`insert into ${this.schema}.${this.table} (title, content, user_id) values ($1, $2, $3) returning *`, [post.title, post.content, post.user_id]);
 	}
 
 	updatePost(id, post) {
 		return this.database.none(`update ${this.schema}.${this.table} set title = $1, content = $2 where id = $3`, [post.title, post.content, id]);
 	}
 
-	getPostByTitle(title) {
-		return this.database.oneOrNone(`select * from ${this.schema}.${this.table} where title = $1`, [title]);
+	getPostByTitleAndUser(title, user_id) {
+		return this.database.oneOrNone(`select * from ${this.schema}.${this.table} where title = $1 and user_id = $2`, [title, user_id]);
 	}
 }

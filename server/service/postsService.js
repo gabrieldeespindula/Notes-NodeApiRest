@@ -10,18 +10,20 @@ module.exports = class PostsService extends Service {
 		this.postData = new PostsData();
 	}
 
-	getPosts() {
-		return this.postData.getAll();
+	getPosts(user_id) {
+		return this.postData.getItemsByUserId(user_id);
 	}
 
 	async savePost(post) {
-		Util.verifyFields(['title', 'content'], post);
-		const existingPost = await this.postData.getPostByTitle(post.title);
+		Util.verifyFields(['title', 'content', 'user_id'], post);
+		const existingPost = await this.postData.getPostByTitleAndUser(post.title, post.user_id);
 		if (existingPost) throw new Error('Post already exists');
 		return this.postData.savePost(post);
 	}
 
-	deletePost(id) {
+	async deletePost(id, user_id) {
+		const postDb = await this.getPost(id);
+		if (user_id != postDb.user_id) throw new Error('Post not found');
 		return this.postData.delete(id);
 	}
 
@@ -33,7 +35,8 @@ module.exports = class PostsService extends Service {
 
 	async updatePost(id, post) {
 		Util.verifyFields(['title', 'content'], post);
-		await this.getPost(id);
+		const postDb = await this.getPost(id);
+		if (post.user_id != postDb.user_id) throw new Error('Post not found');
 		return this.postData.updatePost(id, post);
 	}
 }

@@ -12,9 +12,10 @@ module.exports = class PostsRoute extends Route {
 	/** Use this function to set the routes */
 	setRoutes() {
 		const postsService = new PostsService();
-		this.router.get('/posts', async (req, res, errorHandler) => {
+
+		this.router.get('/posts', super.secure_user, async (req, res, errorHandler) => {
 			try {
-				const posts = await postsService.getPosts();
+				const posts = await postsService.getPosts(req.body.user_id);
 				res.status(200).json(posts);
 			} catch (e) {
 				errorHandler(e);
@@ -27,7 +28,7 @@ module.exports = class PostsRoute extends Route {
 		});
 
 		// insert
-		this.router.post('/posts', async (req, res, errorHandler) => {
+		this.router.post('/posts', super.secure_user, async (req, res, errorHandler) => {
 			const post = req.body;
 			try {
 				const newPost = await postsService.savePost(post);
@@ -38,7 +39,7 @@ module.exports = class PostsRoute extends Route {
 		});
 
 		// update
-		this.router.put('/posts/:id', async (req, res, errorHandler) => {
+		this.router.put('/posts/:id', super.secure_user, async (req, res, errorHandler) => {
 			const post = req.body;
 			try {
 				await postsService.updatePost(req.params.id, post);
@@ -49,9 +50,9 @@ module.exports = class PostsRoute extends Route {
 		});
 
 		// delete
-		this.router.delete('/posts/:id', async (req, res, errorHandler) => {
+		this.router.delete('/posts/:id', super.secure_user, async (req, res, errorHandler) => {
 			try {
-				await postsService.deletePost(req.params.id);
+				await postsService.deletePost(req.params.id, req.body.user_id);
 				res.status(204).end();
 			} catch (e) {
 				errorHandler(e);
