@@ -10,24 +10,6 @@ const request = (endpoint, method = 'get', data) => {
 	return axios({ url, method, data, validateStatus: false });
 }
 
-test('Get users', async () => {
-	const usersBeforeTest = await usersService.getUsers();
-	const usersLength = usersBeforeTest ? usersBeforeTest.length : 0;
-	const arrayUsers = [];
-	for (let i = 1; i <= 3; i++) {
-		let data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
-		let insertId = await usersService.saveUser(data);
-		arrayUsers.push(insertId);
-	}
-	const response = await request('users');
-	expect(response.status).toBe(200);
-	const users = response.data;
-	expect(users).toHaveLength(usersLength + 3);
-	arrayUsers.forEach(async (item) => {
-		await usersService.deleteUser(item.id);
-	});
-})
-
 test('Insert user', async () => {
 	const data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
 	const response = await request('users', 'post', data);

@@ -12,19 +12,11 @@ module.exports = class NotesRoute extends Route {
 	/** Use this function to set the routes */
 	setRoutes() {
 		const usersService = new UsersService();
-		this.router.get('/users', async (req, res, errorHandler) => {
-			try {
-				const users = await usersService.getUsers();
-				res.status(200).json(users);
-			} catch (e) {
-				errorHandler(e);
-			}
-		});
 
 		this.router.post('/users', async (req, res, errorHandler) => {
-			const post = req.body;
+			const user = req.body;
 			try {
-				const newUser = await usersService.saveUser(post);
+				const newUser = await usersService.saveUser(user);
 				res.status(201).json(newUser);
 			} catch (e) {
 				errorHandler(e);
@@ -32,9 +24,9 @@ module.exports = class NotesRoute extends Route {
 		});
 
 		this.router.put('/users/:id', async (req, res, errorHandler) => {
-			const post = req.body;
+			const user = req.body;
 			try {
-				await usersService.updateUser(req.params.id, post);
+				await usersService.updateUser(req.params.id, user);
 				res.status(204).end();
 			} catch (e) {
 				errorHandler(e);
