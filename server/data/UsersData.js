@@ -6,11 +6,11 @@ module.exports = class UsersData extends Data {
 	}
 
 	saveUser(user) {
-		return this.database.one(`insert into ${this.schema}.${this.table} (name, email, password) values ($1, $2, $3) returning *`, [user.name, user.email, user.password]);
+		return super.save(user, ['name', 'email', 'password']);
 	}
 
 	updateUser(id, user) {
-		return this.database.none(`update ${this.schema}.${this.table} set name = $1, password = $2 where id = $3`, [user.name, user.password, id]);
+		return super.update(id, user, ['name', 'password']);
 	}
 
 	getUserByEmail(email) {
