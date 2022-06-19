@@ -6,7 +6,7 @@ module.exports = class UsersData extends Data {
 	}
 
 	saveUser(user) {
-		return this.database.one(`insert into ${this.schema}.${this.table} (name, email, password) values ($1, $2, $3) returning *`, [user.name, user.email, user.password]);
+		return super.save(user, ['name', 'email', 'password']);
 	}
 
 	updateUser(id, user) {

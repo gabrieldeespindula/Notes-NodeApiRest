@@ -11,7 +11,7 @@ module.exports = class NotesData extends Data {
 	}
 
 	saveNote(post) {
-		return this.database.one(`insert into ${this.schema}.${this.table} (title, content, user_id) values ($1, $2, $3) returning *`, [post.title, post.content, post.user_id]);
+		return super.save(post, ['title', 'content', 'user_id'])
 	}
 
 	updateNote(id, post) {
