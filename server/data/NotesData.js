@@ -15,7 +15,7 @@ module.exports = class NotesData extends Data {
 	}
 
 	updateNote(id, post) {
-		return this.database.none(`update ${this.schema}.${this.table} set title = $1, content = $2 where id = $3`, [post.title, post.content, id]);
+		return super.update(id, post, ['title', 'content']);
 	}
 
 	getNoteByTitleAndUser(title, user_id) {

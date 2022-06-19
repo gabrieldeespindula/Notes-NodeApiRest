@@ -10,7 +10,7 @@ module.exports = class UsersData extends Data {
 	}
 
 	updateUser(id, user) {
-		return this.database.none(`update ${this.schema}.${this.table} set name = $1, password = $2 where id = $3`, [user.name, user.password, id]);
+		return super.update(id, user, ['name', 'password']);
 	}
 
 	getUserByEmail(email) {
