@@ -1,7 +1,7 @@
 const express = require('express');
 const NotesRoute = require('./route/NotesRoute');
 const UsersRoute = require('./route/UsersRoute');
-
+const port = process.env.PORT || 3000;
 /** Server launcher and general configuration */
 class App {
 
@@ -14,7 +14,7 @@ class App {
 
 		this.app.use(this.errorHandler);
 
-		this.app.listen(3000);
+		this.app.listen(port);
 	}
 
 	/** Fetch API routes */
