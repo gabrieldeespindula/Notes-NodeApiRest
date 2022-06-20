@@ -1,5 +1,6 @@
 const Service = require('./Service');
 const UsersData = require('../data/UsersData');
+const NotesData = require('../data/NotesData');
 const Util = require('../libs/Util');
 
 module.exports = class UsersService extends Service {
@@ -22,8 +23,11 @@ module.exports = class UsersService extends Service {
 		return this.usersData.saveUser(user);
 	}
 
-	deleteUser(id) {
-		return this.usersData.delete(id);
+	async deleteUser(id) {
+		const notesData = new NotesData();
+		await this.getUser(id);
+		await notesData.deleteByUserId(id);
+		return await this.usersData.delete(id);
 	}
 
 	async getUser(id) {
