@@ -1,5 +1,6 @@
 const express = require('express');
 const Util = require('../libs/Util');
+const UserService = require('../service/UsersService')
 
 module.exports = class Route {
 
@@ -10,7 +11,7 @@ module.exports = class Route {
 		this.setRoutes();
 	}
 
-	secure_user(req, res, next) {
+	async secure_user(req, res, next) {
 		try {
 			const token = req.headers.authorization.split(' ')[1];
 			const user = Util.jwtVerify(token);

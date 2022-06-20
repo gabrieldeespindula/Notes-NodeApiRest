@@ -23,19 +23,20 @@ module.exports = class NotesRoute extends Route {
 			}
 		});
 
-		this.router.put('/users/:id', async (req, res, errorHandler) => {
+		this.router.put('/users', super.secure_user, async (req, res, errorHandler) => {
 			const user = req.body;
 			try {
-				await usersService.updateUser(req.params.id, user);
+				await usersService.updateUser(user.user_id, user);
 				res.status(204).end();
 			} catch (e) {
 				errorHandler(e);
 			}
 		});
 
-		this.router.delete('/users/:id', async (req, res, errorHandler) => {
+		this.router.delete('/users', super.secure_user, async (req, res, errorHandler) => {
+			const user_id = req.body.user_id;
 			try {
-				await usersService.deleteUser(req.params.id);
+				await usersService.deleteUser(user_id);
 				res.status(204).end();
 			} catch (e) {
 				errorHandler(e);

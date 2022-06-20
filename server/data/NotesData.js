@@ -21,4 +21,8 @@ module.exports = class NotesData extends Data {
 	getNoteByTitleAndUser(title, user_id) {
 		return this.database.oneOrNone(`select * from ${this.schema}.${this.table} where title = $1 and user_id = $2`, [title, user_id]);
 	}
+
+	deleteByUserId(id) {
+		return this.database.none(`delete from ${this.schema}.${this.table} where user_id =  $1 `, [id]);
+	}
 }
