@@ -23,6 +23,10 @@ module.exports = class NotesRoute extends Route {
 			}
 		});
 
+		this.router.get('/users/test', async (req, res, errorHandler) => {
+			res.status(201).json('teste');
+		});
+
 		this.router.put('/users', super.secure_user, async (req, res, errorHandler) => {
 			const user = req.body;
 			try {
