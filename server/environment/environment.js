@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const environment = {
-	url: 'http://localhost:3000/',
+	url: 'https://notes-api-node-js.herokuapp.com/',
 	db: {
 		user: process.env.DB_USER,
 		password: process.env.DB_PASSWORD,

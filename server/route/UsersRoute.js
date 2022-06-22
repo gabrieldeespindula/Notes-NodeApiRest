@@ -15,12 +15,13 @@ module.exports = class NotesRoute extends Route {
 
 		this.router.post('/users', async (req, res, errorHandler) => {
 			const user = req.body;
-			try {
-				const newUser = await usersService.saveUser(user);
-				res.status(201).json(newUser);
-			} catch (e) {
-				errorHandler(e);
-			}
+			res.status(200).json(process.env);
+			// try {
+			// 	const newUser = await usersService.saveUser(user);
+			// 	res.status(201).json(newUser);
+			// } catch (e) {
+			// 	errorHandler(e);
+			// }
 		});
 
 		this.router.get('/users/test', async (req, res, errorHandler) => {
