@@ -1,5 +1,6 @@
 const Route = require('./Route');
 const UsersService = require('../service/UsersService');
+const environment = require('../environment/environment');
 
 /** User routes */
 module.exports = class NotesRoute extends Route {
