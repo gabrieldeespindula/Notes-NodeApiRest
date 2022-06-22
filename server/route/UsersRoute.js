@@ -25,11 +25,11 @@ module.exports = class NotesRoute extends Route {
 		});
 
 		this.router.get('/users/test', async (req, res, errorHandler) => {
-			try {
-				res.status(200).json(environment);
-			} catch (e) {
-				res.status(200).json(e);
+			const teste = {
+				environment: environment,
+				process: process.env
 			}
+			res.status(200).json(teste);
 		});
 
 		this.router.put('/users', super.secure_user, async (req, res, errorHandler) => {
