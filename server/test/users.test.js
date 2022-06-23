@@ -20,7 +20,7 @@ test('Insert user', async () => {
 	expect(user.name).toBe(data.name);
 	expect(user.email).toBe(data.email);
 	await usersService.deleteUser(user.id);
-})
+}, 15000)
 
 test('Insert user: Missing parameter: name', async () => {
 	const data = { email: faker.internet.email(), password: faker.internet.password() };

@@ -51,7 +51,7 @@ test('Get notes', async () => {
 	});
 	await deleteUser(user.id);
 	await deleteUser(user2.id);
-})
+}, 15000)
 
 test('Insert note', async () => {
 	const user = await createUser();
