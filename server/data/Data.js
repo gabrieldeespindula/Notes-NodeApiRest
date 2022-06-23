@@ -1,7 +1,7 @@
 const environment = require('../environment/environment');
 const pgp = require('pg-promise')();
 
-const database = pgp(process.env.DATABASE_URL);
+const database = pgp(process.env.DATABASE_URL + '?sslmode=require');
 
 module.exports = class Data {
 

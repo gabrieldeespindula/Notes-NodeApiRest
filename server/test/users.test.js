@@ -15,9 +15,9 @@ const request = (endpoint, method = 'get', data, token = null) => {
 test.only('Insert user', async () => {
 	const data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
 	const response = await request('users', 'post', data);
+	console.log(response);
 	expect(response.status).toBe(201);
 	const user = response.data;
-	console.log(user);
 	expect(user.name).toBe(data.name);
 	expect(user.email).toBe(data.email);
 	await usersService.deleteUser(user.id);
