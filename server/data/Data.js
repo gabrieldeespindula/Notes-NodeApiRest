@@ -1,13 +1,7 @@
 const environment = require('../environment/environment');
 const pgp = require('pg-promise')();
 
-const database = pgp({
-	user: environment.db.user,
-	password: environment.db.password,
-	host: environment.db.host,
-	port: environment.db.port,
-	database: environment.db.database
-});
+const database = pgp(process.env.DATABASE_URL);
 
 module.exports = class Data {
 

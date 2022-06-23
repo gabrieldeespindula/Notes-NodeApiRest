@@ -13,16 +13,14 @@ const request = (endpoint, method = 'get', data, token = null) => {
 }
 
 test.only('Insert user', async () => {
-	const user = await usersService.saveUser({ name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() });
+	const data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
+	const response = await request('users', 'post', data);
+	expect(response.status).toBe(201);
+	const user = response.data;
 	console.log(user);
-	// const data = { name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() };
-	// const response = await request('users', 'post', data);
-	// console.log(response);
-	// expect(response.status).toBe(201);
-	// const user = response.data;
-	// expect(user.name).toBe(data.name);
-	// expect(user.email).toBe(data.email);
-	// await usersService.deleteUser(user.id);
+	expect(user.name).toBe(data.name);
+	expect(user.email).toBe(data.email);
+	await usersService.deleteUser(user.id);
 })
 
 test('Insert user: Missing parameter: name', async () => {
