@@ -6,8 +6,8 @@ const Util = require('../libs/Util');
 
 const usersService = new UsersService();
 
-const request = (endpoint, method = 'get', data, token = null) => {
-	const url = environment.url + endpoint;
+const request = (endpoint, method = 'get', data = {}, token = null) => {
+	const url = environment.URL + endpoint;
 	const headers = token != null ? { Authorization: `Bearer ${token}` } : {};
 	return axios({ url, method, data, validateStatus: false, headers });
 }

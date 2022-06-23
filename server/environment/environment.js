@@ -1,15 +1,9 @@
 require('dotenv').config();
 
 const environment = {
-	url: 'http://localhost:3000/',
-	db: {
-		user: process.env.DB_USER,
-		password: process.env.DB_PASSWORD,
-		host: process.env.DB_HOST,
-		port: process.env.DB_POST || 5432,
-		schema: 'notes',
-		database: process.env.DB_DATABASE
-	},
+	URL: process.env.ENV_URL,
+	DATABASE_URL: process.env.DATABASE_URL,
+	DATABASE_URL_ADDITIONAL_CONFIG: process.env.DATABASE_URL_ADDITIONAL_CONFIG || '',
 	JWT_KEY: process.env.JWT_KEY
 };
 
