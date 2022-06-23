@@ -1,13 +1,7 @@
 const environment = require('../environment/environment');
 const pgp = require('pg-promise')();
 
-const database = pgp({
-	user: environment.db.user,
-	password: environment.db.password,
-	host: environment.db.hostuser,
-	port: environment.db.portuser,
-	database: environment.db.databaseuser
-});
+const database = pgp(environment.DATABASE_URL + environment.DATABASE_URL_ADDITIONAL_CONFIG);
 
 module.exports = class Data {
 
@@ -15,7 +9,7 @@ module.exports = class Data {
 	schema;
 	table;
 	constructor(table) {
-		this.schema = environment.db.schema;
+		this.schema = 'notes';
 		this.database = database;
 		this.table = table;
 	}

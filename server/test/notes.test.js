@@ -9,7 +9,7 @@ const notesService = new NotesService();
 const usersService = new UsersService();
 
 const request = (endpoint, method = 'get', data, token = null) => {
-	const url = environment.url + endpoint;
+	const url = environment.URL + endpoint;
 	const headers = token != null ? { Authorization: `Bearer ${token}` } : {};
 	return axios({ url, method, data, validateStatus: false, headers });
 }
@@ -51,7 +51,7 @@ test('Get notes', async () => {
 	});
 	await deleteUser(user.id);
 	await deleteUser(user2.id);
-})
+}, 15000)
 
 test('Insert note', async () => {
 	const user = await createUser();
