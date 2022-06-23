@@ -6,8 +6,8 @@ const Util = require('../libs/Util');
 
 const usersService = new UsersService();
 
-const request = (endpoint, method = 'get', data, token = null) => {
-	const url = environment.url + endpoint;
+const request = (endpoint, method = 'get', data = {}, token = null) => {
+	const url = environment.URL + endpoint;
 	const headers = token != null ? { Authorization: `Bearer ${token}` } : {};
 	return axios({ url, method, data, validateStatus: false, headers });
 }
@@ -20,7 +20,7 @@ test('Insert user', async () => {
 	expect(user.name).toBe(data.name);
 	expect(user.email).toBe(data.email);
 	await usersService.deleteUser(user.id);
-})
+}, 15000)
 
 test('Insert user: Missing parameter: name', async () => {
 	const data = { email: faker.internet.email(), password: faker.internet.password() };
