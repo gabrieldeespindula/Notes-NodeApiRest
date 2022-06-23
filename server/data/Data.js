@@ -4,9 +4,9 @@ const pgp = require('pg-promise')();
 const database = pgp({
 	user: environment.db.user,
 	password: environment.db.password,
-	host: environment.db.hostuser,
-	port: environment.db.portuser,
-	database: environment.db.databaseuser
+	host: environment.db.host,
+	port: environment.db.port,
+	database: environment.db.database
 });
 
 module.exports = class Data {
