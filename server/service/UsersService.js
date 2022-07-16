@@ -11,8 +11,8 @@ module.exports = class UsersService extends Service {
 		this.usersData = new UsersData();
 	}
 
-	getUsers() {
-		return this.usersData.getAll();
+	getUser(user_id) {
+		return this.usersData.getById(user_id);
 	}
 
 	async saveUser(user) {
