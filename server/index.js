@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const NotesRoute = require('./route/NotesRoute');
 const UsersRoute = require('./route/UsersRoute');
 const port = process.env.PORT || 3000;
@@ -8,6 +9,7 @@ class App {
 	app;
 	constructor() {
 		this.app = express();
+		this.app.use(cors());
 		this.app.use(express.json());
 
 		this.getRoutes();
