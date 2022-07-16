@@ -18,7 +18,7 @@ module.exports = class Route {
 			req.body.user_id = user.id;
 			next();
 		} catch (e) {
-			throw new Error('Authentication failed');
+			return res.status(401).send('Authentication failed');
 		}
 	}
 

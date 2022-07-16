@@ -52,6 +52,16 @@ module.exports = class NotesRoute extends Route {
 				errorHandler(e);
 			}
 		});
+
+		this.router.get('/users', super.secure_user, async (req, res, errorHandler) => {
+			const user_id = req.body.user_id;
+			try {
+				const user = await usersService.getUser(user_id);
+				res.status(200).json(user);
+			} catch (e) {
+				errorHandler(e);
+			}
+		});
 	}
 
 	/** return routes */

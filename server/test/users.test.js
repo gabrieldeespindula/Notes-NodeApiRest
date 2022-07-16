@@ -130,3 +130,13 @@ test('Login: Missing parameter', async () => {
 	expect(response.status).toBe(400);
 	await usersService.deleteUser(user.id);
 })
+
+test.only('get User', async () => {
+	const user = await usersService.saveUser({ name: faker.name.findName(), email: faker.internet.email(), password: faker.internet.password() });
+	user.token = Util.jwtSign({ id: user.id, email: user.email });
+	const response = await request('users/', 'get', {}, user.token);
+	expect(response.status).toBe(200);
+	const userRes = response.data;
+	expect(user.name).toBe(userRes.name);
+	expect(user.email).toBe(userRes.email);
+})
