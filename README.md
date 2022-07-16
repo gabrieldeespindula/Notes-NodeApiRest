@@ -5,7 +5,7 @@ To test, just use the insert user endpoint, login and use your token.
 
 ---
 ## Swagger
-You can check the documentation on [Swagger](http://exemplo.com/)
+You can check the documentation on [Swagger](https://app.swaggerhub.com/apis-docs/gabrieldeespindula/Notes/0.1)
 
 ---
 ## Requirements
