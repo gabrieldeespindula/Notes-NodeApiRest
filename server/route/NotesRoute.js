@@ -24,7 +24,13 @@ module.exports = class NotesRoute extends Route {
 
 		// get by id
 		this.router.get('/notes/:id', async (req, res) => {
-
+			const note = req.body;
+			try {
+				const note = await notesService.getNote(req.params.id);
+				res.status(200).json(note);
+			} catch (e) {
+				errorHandler(e);
+			}
 		});
 
 		// insert

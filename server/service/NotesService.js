@@ -29,7 +29,7 @@ module.exports = class NotesService extends Service {
 
 	async getNote(id) {
 		const note = await this.noteData.getById(id);
-		if (!note) throw new Error('Note not found');
+		if ((!note || note.user_id != noteDb.user_id) throw new Error('Note not found');
 		return note;
 	}
 
